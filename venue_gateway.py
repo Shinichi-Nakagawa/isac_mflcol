@@ -34,15 +34,20 @@ class Venue(object):
                                             client_secret=self.client_secret
                                             )
     
-    def venue_search(self,query,ll=["0.0","0.0"]):
+    def venue_search(self,query,ll=["0.0","0.0"],limit=50,intent="browse",radius=1000):
         '''
         スポット一覧を検索
         input : ll("lat,lon"),params
-        output: dict
+        output: dict,count
         raise : none
         '''
-        
-        return self.client.venues.search(params={'ll':",".join(ll)})
+        ret = self.client.venues.search(params={
+                                                 'll':",".join(ll),
+                                                 "limit":limit,
+                                                 "intent":intent,
+                                                 "radius":radius
+                                                 })
+        return ret,len(ret["venues"])
 
 class TestVenue(TestCase):
     
@@ -57,8 +62,9 @@ class TestVenue(TestCase):
     def test_venue_search(self):
         # TODO
         self.venue = Venue()
-        ret = self.venue.venue_search({},ll=("35.706029","139.664812"))
+        ret,count = self.venue.venue_search({},ll=("35.706029","139.664812"))
         print json.dumps(ret,encoding="utf-8",ensure_ascii=True)
+        print "count: %s" % count
 
 if __name__ == '__main__':
     unittest.main()

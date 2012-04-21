@@ -54,14 +54,21 @@ class VenueController(SabaniController):
                                                None,
                                                )
                 return self.json_dumps_utf8(self.ret_dict)
-            # TODO コンテンツを検索
-            ret_list = self.venue.venue_search({},ll=(params["lat"],params["lon"]))
+            # コンテンツを検索
+            ret_list,count = self.venue.venue_search({},
+                                                     ll=(params[self.HTTP_REQUEST_GET_LAT],
+                                                         params[self.HTTP_REQUEST_GET_LON]))
+            if count == 0:
+                ret_list,count = self.venue.venue_search({},
+                                                         ll=(params[self.HTTP_REQUEST_GET_LAT],
+                                                             params[self.HTTP_REQUEST_GET_LON]),
+                                                         radius=100000)
             start_response(self.HTTP_STS_200, self.HTTP_RESPONSE_HEADER_TEXT)
             self.create_http_responce_dict(
                                             self.API_STS_OK,
                                             None,
                                             ret_list,
-                                            len(ret_list),
+                                            count,
                                             )
             return self.json_dumps_utf8(self.ret_dict)
         else:
