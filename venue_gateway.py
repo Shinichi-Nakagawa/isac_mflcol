@@ -34,7 +34,7 @@ class Venue(object):
                                             client_secret=self.client_secret
                                             )
     
-    def venue_search(self,query,ll=["0.0","0.0"],limit=50,intent="browse",radius=1000):
+    def venue_search(self,query,ll=["0.0","0.0"],limit=5,intent="browse",radius=1000):
         '''
         スポット一覧を検索
         input : ll("lat,lon"),params
