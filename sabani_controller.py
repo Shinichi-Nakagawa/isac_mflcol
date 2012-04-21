@@ -23,6 +23,8 @@ class SabaniController(Controller):
     HTTP_REQUEST_GET_KEY_OBJECT_ID = '_id'
     HTTP_REQUEST_GET_LAT = 'lat'
     HTTP_REQUEST_GET_LON = 'lon'
+    HTTP_REQUEST_GET_PAGE = 'page'
+    HTTP_REQUEST_GET_PER_PAGE = 'per_page'
     HTTP_REQUEST_GET_NE_LAT = 'nelat'
     HTTP_REQUEST_GET_NE_LON = 'nelon'
     HTTP_REQUEST_GET_SW_LAT = 'swlat'

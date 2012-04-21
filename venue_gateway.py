@@ -9,7 +9,8 @@ Venueクライアントのクラス
 
 @author: shinyorke
 '''
-
+import json
+import foursquare
 import unittest
 from unittest import TestCase
 
@@ -17,7 +18,9 @@ class Venue(object):
     '''
     four squareから写真を探す用のクラス
     '''
-    # TODO
+    client_id='40OQEJVSRAXE5WIDAXVNBK1DY1I2L2KV3B2ARFD2VVDMG1G3'
+    client_secret='TSEH325GOS0J11E4WTYJLFGWBJ10O1VIFUX2NJBMXNPRUXDJ'
+    client = None
 
     def __init__(self):
         '''
@@ -26,19 +29,20 @@ class Venue(object):
         output: none
         raise : none
         '''
-        pass
+        self.client = foursquare.Foursquare(
+                                            client_id=self.client_id,
+                                            client_secret=self.client_secret
+                                            )
     
-    def venue_search(self,hoge):
+    def venue_search(self,query,ll=["0.0","0.0"]):
         '''
         スポット一覧を検索
-        # TODO 引数は暫定
-        input : hoge
+        input : ll("lat,lon"),params
         output: dict
         raise : none
         '''
-        # TODO
-        ret = {}
-        return ret
+        
+        return self.client.venues.search(params={'ll':",".join(ll)})
 
 class TestVenue(TestCase):
     
@@ -53,8 +57,8 @@ class TestVenue(TestCase):
     def test_venue_search(self):
         # TODO
         self.venue = Venue()
-        hoge = ""
-        self.venue.venue_search(hoge)
+        ret = self.venue.venue_search({},ll=("35.706029","139.664812"))
+        print json.dumps(ret,encoding="utf-8",ensure_ascii=True)
 
 if __name__ == '__main__':
     unittest.main()

@@ -19,6 +19,8 @@ class FlickerPhotosController(SabaniController):
     [GET 引数]
     lat      : 緯度
     lon      : 経度
+    per_page : 一ページあたりの表示画像数(任意)
+    page     : カレントページ数(任意)
     '''
 
     def __init__(self):
@@ -54,7 +56,18 @@ class FlickerPhotosController(SabaniController):
                                                )
                 return self.json_dumps_utf8(self.ret_dict)
             # 写真を検索
-            photos = self.flickr.photos_search(lat=params["lat"], lon=params["lon"])
+            page = 1
+            if params.has_key(self.HTTP_REQUEST_GET_PAGE):
+                page = int(params[self.HTTP_REQUEST_GET_PAGE])
+            per_page = 10
+            if params.has_key(self.HTTP_REQUEST_GET_PER_PAGE):
+                per_page = int(params[self.HTTP_REQUEST_GET_PER_PAGE])
+            photos = self.flickr.photos_search(
+                                               lat=params[self.HTTP_REQUEST_GET_LAT], 
+                                               lon=params[self.HTTP_REQUEST_GET_LON],
+                                               page=page,
+                                               per_page=per_page
+                                               )
             # 検索結果を編集
             ret_list = self.flickr.url_list(photos)
             start_response(self.HTTP_STS_200, self.HTTP_RESPONSE_HEADER_TEXT)
@@ -62,7 +75,7 @@ class FlickerPhotosController(SabaniController):
                                             self.API_STS_OK,
                                             None,
                                             ret_list,
-                                            len(ret_list),
+                                            None,
                                             )
             return self.json_dumps_utf8(self.ret_dict)
         else:
@@ -87,7 +100,8 @@ class FlickerPhotosController(SabaniController):
         chk_dict = {}
         # GETパラメーター存在チェック
         chk_dict.update(self.chk_is_params(params,
-                                           [self.HTTP_REQUEST_GET_LAT,
+                                           [
+                                            self.HTTP_REQUEST_GET_LAT,
                                             self.HTTP_REQUEST_GET_LON,
                                             ]))
         

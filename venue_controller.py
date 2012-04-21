@@ -55,7 +55,7 @@ class VenueController(SabaniController):
                                                )
                 return self.json_dumps_utf8(self.ret_dict)
             # TODO コンテンツを検索
-            ret_list = self.venue.venue_search(params)
+            ret_list = self.venue.venue_search({},ll=(params["lat"],params["lon"]))
             start_response(self.HTTP_STS_200, self.HTTP_RESPONSE_HEADER_TEXT)
             self.create_http_responce_dict(
                                             self.API_STS_OK,
@@ -85,14 +85,12 @@ class VenueController(SabaniController):
         # チェック戻り値
         chk_dict = {}
         # GETパラメーター存在チェック
-        '''
         chk_dict.update(self.chk_is_params(params,
                                            [
                                             # TODO
                                             self.HTTP_REQUEST_GET_LAT,
                                             self.HTTP_REQUEST_GET_LON,
                                             ]))
-        '''
         
         return chk_dict
 

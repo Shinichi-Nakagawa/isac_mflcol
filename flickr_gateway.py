@@ -31,23 +31,30 @@ class Flickr(object):
         '''
         pass
     
-    def photos_search(self,lat=0.0,lon=0.0,extras="url_s,url_m,url_n,geo",per_page=10,page=1):
+    def photos_search(self,lat=0.0,lon=0.0,text="",extras="url_s,url_m,url_n,geo",per_page=10,page=1):
         '''
         写真一覧を検索
         input : lat,lon
         output: dict
         raise : none
         '''
-        photos = self.flickr.photos_search(lat=lat, lon=lon, extras=extras, per_page=per_page)
+        photos = self.flickr.photos_search(
+                                           lat=lat, 
+                                           lon=lon, 
+                                           extras=extras, 
+                                           per_page=per_page,
+                                           page=page
+                                           )
         return photos
         
     def url_list(self,photos):
         '''
         URLのリストを生成
         input : photos
-        output: [{photo:{thumbnail:url,normal:url,large:url}},...]
+        output: [{photo:{thumbnail:url,normal:url,large:url}},...],pages,total
         raise : none
         '''
+        pages,total = photos.findall("photos")[0].attrib["pages"],photos.findall("photos")[0].attrib["total"]
         ret_list = []
         for row in photos.findall("photos"):
             for photo in row.findall("photo"):
@@ -62,7 +69,11 @@ class Flickr(object):
                                               },
                                   }
                                  })
-        return ret_list
+        return {
+                "photos":ret_list,
+                "pages":pages,
+                "total":total
+                }
 
 class TestFlickr(TestCase):
     
@@ -76,11 +87,12 @@ class TestFlickr(TestCase):
     
     def test_photos_search(self):
         self.flickr = Flickr()
-        photos = self.flickr.photos_search(lat=35.703189,lon=139.579926)
+        photos = self.flickr.photos_search(lat=35.703189,lon=139.579926,text="")
         photo_list = self.flickr.url_list(photos)
-        for row in photo_list:
+        for row in photo_list["photos"]:
             print "thumbnail： %s normal： %s large： %s" % (str(row["photo"]["thumbnail"]), str(row["photo"]["normal"]), str(row["photo"]["large"]))
             print "latitude: %s longitude: %s" % (str(row["photo"]["location"]["lat"]),str(row["photo"]["location"]["lon"]))
+        print "pages: %s, total: %s" % (photo_list["pages"],photo_list["total"])
 
 if __name__ == '__main__':
     unittest.main()
