@@ -26,16 +26,33 @@ section > .row {
 	height:580px;
 }
 .twitter {
-	
+	margin:0 0 10px;
+}
+.twitter h3 {
+	height:35px;
+}
+.twitter h3 span {
+	color: #999;
+}
+.twitter#twit-sideA h3 {
+	color: #FF3300;
+}
+.twitter#twit-sideB h3 {
+	color: #357CAD;
 }
 .twitter ul {
-	margin:0;
+	margin:0; padding:5px;
+	height:240px;
+	overflow:scroll;
+	background:#FFF;
 }
 .twitter ul li {
 	list-style:none;
 	min-height:32px;
-	padding:0 0 0 38px;
+	margin: 0 0 5px 0;
+	padding:0 0 5px 38px;
 	position: relative;
+	border-bottom: 1px dotted #ddd;
 }
 .twitter ul li img {
 	width:32px; height:32px;
@@ -107,8 +124,9 @@ section > .row {
 	bottom:0; right:0;
 	width: 130px; height:112px;
 	text-align:left;
-	padding:30px 130px 0 0;
-	background: url(images/globe.png) no-repeat right;
+	padding:30px 130px 0 20px;
+	background: rgba(255,255,255,0.1) url(images/globe.png) no-repeat right;
+	border: 1px solid rgba(255,255,255,0.1);
 }
 
 
@@ -125,4 +143,9 @@ section > .row {
 */}
 .footer p {
 	color: #555;
+}
+.footer .logo {
+	text-indent:-9999px;
+	width:150px; height:50px;
+	background: url(images/logo-small.png) no-repeat;
 }
