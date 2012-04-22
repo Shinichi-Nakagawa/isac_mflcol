@@ -9,6 +9,7 @@ FlickerPhotos Controllerクラス
 
 @author: shinyorke
 '''
+import datetime,time
 from sabani_controller import SabaniController
 from flickr_gateway import Flickr
 
@@ -62,11 +63,14 @@ class FlickerPhotosController(SabaniController):
             per_page = 10
             if params.has_key(self.HTTP_REQUEST_GET_PER_PAGE):
                 per_page = int(params[self.HTTP_REQUEST_GET_PER_PAGE])
+            min_time,max_time = self._query_unixtime()
             photos = self.flickr.photos_search(
                                                lat=params[self.HTTP_REQUEST_GET_LAT], 
                                                lon=params[self.HTTP_REQUEST_GET_LON],
                                                page=page,
-                                               per_page=per_page
+                                               per_page=per_page,
+                                               min_upload_date=min_time,
+                                               max_upload_date=max_time
                                                )
             # 検索結果を編集
             ret_list = self.flickr.url_list(photos)
@@ -106,6 +110,14 @@ class FlickerPhotosController(SabaniController):
                                             ]))
         
         return chk_dict
+
+    def _query_unixtime(self):
+        f_time,t_time=0,0
+        d = datetime.datetime.today()
+        fd = d -datetime.timedelta(days=365)
+        f_time = time.mktime(fd.timetuple())
+        t_time = time.mktime(d.timetuple())
+        return f_time,t_time
 
 from wsgiref import simple_server
 

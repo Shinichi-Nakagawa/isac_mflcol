@@ -31,7 +31,16 @@ class Flickr(object):
         '''
         pass
     
-    def photos_search(self,lat=0.0,lon=0.0,text="",extras="url_s,url_m,url_n,geo",per_page=10,page=1):
+    def photos_search(self,
+                      lat=0.0,
+                      lon=0.0,
+                      text="",
+                      extras="url_s,url_m,url_n,geo",
+                      per_page=10,
+                      page=1,
+                      min_upload_date=0,
+                      max_upload_date=0
+                      ):
         '''
         写真一覧を検索
         input : lat,lon
@@ -43,7 +52,9 @@ class Flickr(object):
                                            lon=lon, 
                                            extras=extras, 
                                            per_page=per_page,
-                                           page=page
+                                           page=page,
+                                           min_upload_date=min_upload_date,
+                                           max_upload_date=max_upload_date
                                            )
         return photos
         
@@ -87,7 +98,13 @@ class TestFlickr(TestCase):
     
     def test_photos_search(self):
         self.flickr = Flickr()
-        photos = self.flickr.photos_search(lat=35.703189,lon=139.579926,text="")
+        photos = self.flickr.photos_search(
+                                           lat=35.703189,
+                                           lon=139.579926,
+                                           text="",
+                                           min_upload_date=1303440369,
+                                           max_upload_date=1335062769
+                                           )
         photo_list = self.flickr.url_list(photos)
         for row in photo_list["photos"]:
             print "thumbnail： %s normal： %s large： %s" % (str(row["photo"]["thumbnail"]), str(row["photo"]["normal"]), str(row["photo"]["large"]))
